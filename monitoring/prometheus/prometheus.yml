@@ -1,0 +1,31 @@
+---
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'homelab'
+rule_files:
+scrape_configs:
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['mon_node-exporter:9100']
+      # If you want to scrape other Server etc...
+      #- targets: ['XXX.XXX.XXX.XXX:9100']
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['mon_cadvisor:8080']
+
+  - job_name: 'traefik'
+    # If the traefik has authentication
+    basic_auth:
+        username: XXX
+        password: XXX
+    # If the entrypoint is HTTPS
+    scheme: http
+    static_configs:
+      - targets: ['traefik:8082']
+  
+  - job_name: '3cx_exporter'
+    static_configs:
+      #- targets: ['XXX.XXX.XXX.XXX:9523']

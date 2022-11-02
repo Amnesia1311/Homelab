@@ -1,0 +1,63 @@
+---
+version: '3.3'
+
+services:
+  gitea-db:
+    image: mariadb:10.4
+    container_name: gitea-db
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/docker/gitea/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=gitea
+
+  gitea-app:
+    image: gitea/gitea:latest
+    container_name: gitea-app
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /var/docker/gitea/data:/data # Das ist ein toller kommentar
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - DB_TYPE=mysql
+      - DB_HOST=gitea-db:3306
+      - DB_NAME=gitea
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWD=${MYSQL_PASSWORD}
+      - DISABLE_REGISTRATION=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gitea.entrypoints=http"
+      - "traefik.http.routers.gitea.rule=Host(`${GITEA_URL}`)"
+      - "traefik.http.middlewares.gitea-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.gitea.middlewares=gitea-https-redirect"
+      - "traefik.http.routers.gitea-secure.middlewares=secHeaders@file"
+      - "traefik.http.routers.gitea-secure.entrypoints=https"
+      - "traefik.http.routers.gitea-secure.rule=Host(`${GITEA_URL}`)"
+      - "traefik.http.routers.gitea-secure.tls=true"
+      - "traefik.http.routers.gitea-secure.service=gitea"
+      - "traefik.http.services.gitea.loadbalancer.server.port=3000"
+#      - "traefik.http.middlewares.gitea-ipwhitelist.ipwhitelist.sourcerange=127.0.0.1/32, 192.168.1.0/24, 192.168.178.0/24"
+      - "traefik.docker.network=proxy"
+      # watchtower label enable 
+      - "com.centurylinklabs.watchtower.enable=true" 
+    depends_on:
+      - gitea-db
+    networks:
+      - proxy
+      - default
+
+networks:
+  proxy:
+    external:
+      name: proxy
+  default:
+    driver: bridge

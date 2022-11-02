@@ -1,0 +1,52 @@
+---
+version: '3'
+
+services:
+  traefik:
+    #image: traefik:v2.1
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+      - 8082:8082
+      # Port for jellyfin
+      - 9999:9999
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
+      - ./data/dynamic_conf.yml:/dynamic_conf.yml
+      - ./data/acme.json:/acme.json
+      - ./data/access.log:/var/log/traefik/access.log
+    environment:
+      - INWX_USERNAME=${INWX_USERNAME}
+      - INWX_PASSWORD=${INWX_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`${URL}`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${$DASHBOARD_USER}"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`${URL}`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth,traefik-ipwhitelist"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=inwx"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=${DOMAIN_MAIN}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=${DOMAIN_SANS}"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+      - "providers.file.filename=/dynamic_conf.yml" #Needs to be checked
+      # Dashboard whitelist only for internal ips
+      - "traefik.http.middlewares.traefik-ipwhitelist.ipwhitelist.sourcerange=127.0.0.1/32, 192.168.178.0/24, 192.168.1.0/24"
+
+
+networks:
+  proxy:
+    external: true

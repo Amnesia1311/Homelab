@@ -1,0 +1,29 @@
+---
+version: "2.1"
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    env_file: ./.env
+    volumes:
+      - /var/docker/heimdall:/config
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.heimdall-secure.entrypoints=https"
+      - "traefik.http.routers.heimdall-secure.rule=Host(`${URL}`)"
+      - "traefik.http.routers.heimdall-secure.tls=true"
+      - "traefik.http.routers.heimdall-secure.middlewares=secHeaders@file"
+      - "traefik.http.routers.heimdall-secure.service=heimdall"
+      - "traefik.http.services.heimdall.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"
+      # Watchtower
+      - "com.centurylinklabs.watchtower.enable=true" 
+    networks:
+      - proxy
+      
+
+networks:
+  proxy:
+    external:
+      name: proxy

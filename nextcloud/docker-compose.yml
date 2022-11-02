@@ -1,0 +1,71 @@
+---
+version: '3.3'
+
+services:
+  nextcloud-db:
+    image: postgres:alpine
+    container_name: nextcloud-postgress
+    restart: always
+    volumes:
+      - /var/docker/nextcloud/database:/var/lib/postgresql/data
+    networks:
+      - default
+    env_file:
+      - .env
+
+  nextcloud-redis:
+    image: redis:alpine
+    container_name: nextcloud-redis
+    hostname: nextcloud-redis
+    networks:
+      - default
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
+  nextcloud-app:
+    image: nextcloud:latest
+    container_name: nextcloud-app
+    restart: always
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    environment:
+      - REDIS_HOST=nextcloud-redis
+      - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - /var/docker/nextcloud/app:/var/www/html
+     # - /media/nas-share/nextcloud:/var/www/html/data:rw
+    links:
+      - nextcloud-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nextcloud-secure.entrypoints=https"
+      - "traefik.http.routers.nextcloud-secure.rule=Host(`${NEXTCLOUD_URL}`)"
+      - "traefik.http.routers.nextcloud-secure.tls=true"
+      - "traefik.http.routers.nextcloud-secure.middlewares=nextcloud,secHeaders@file"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.nextcloud.replacepathregex.regex=^/.well-known/ca(l|rd)dav"
+      - "traefik.http.middlewares.nextcloud.replacepathregex.replacement=/remote.php/dav/"
+      - "traefik.http.routers.nextcloud-secure.service=nextcloud"
+      - "traefik.docker.network=proxy"
+    networks:
+      - proxy
+      - default
+
+  nextcloud-cron:
+    image: nextcloud
+    restart: always
+    volumes:
+      - /var/docker/nextcloud/app:/var/www/html
+     # - /media/nas-share/nextcloud:/var/www/html/data:rw
+    entrypoint: /cron.sh
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+
+networks:
+  proxy:
+    external:
+      name: proxy
+  default:
+    driver: bridge

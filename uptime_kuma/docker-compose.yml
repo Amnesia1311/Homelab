@@ -1,0 +1,27 @@
+---
+version: '3.9'
+services:
+  uptime_kuma:
+    container_name: uptime_kuma
+    image: louislam/uptime-kuma:latest
+    volumes:
+     - /var/docker/uptime-kuma:/app/data
+    restart: unless-stopped
+    networks: 
+    - proxy
+    labels:
+     - "traefik.enable=true"
+     - "traefik.http.routers.kuma-secure.entrypoints=https"
+     - "traefik.http.routers.kuma-secure.rule=Host(`${URL}`)"
+     - "traefik.http.routers.kuma-secure.tls=true"
+     - "traefik.http.routers.kuma-secure.middlewares=secHeaders@file"
+     - "traefik.http.routers.kuma-secure.service=kuma"
+     - "traefik.http.services.kuma.loadbalancer.server.port=3001"
+     - "traefik.docker.network=proxy"
+      # Watchtower
+     - "com.centurylinklabs.watchtower.enable=true" 
+
+networks:
+  proxy:
+    external:
+      name: proxy

@@ -1,0 +1,35 @@
+---
+version: '3.8'
+
+services:
+  checkmk:
+    image: checkmk/check-mk-raw:2.0.0-latest
+    restart: always
+    container_name: checkmk
+    privileged: true
+    tmpfs: 
+      - /opt/omd/sites/cmk/tmp:uid=1000,gid=1000
+    volumes:
+      - /var/docker/checkmk:/omd/sites
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - proxy
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.checkmk-secure.entrypoints=https"
+      - "traefik.http.routers.checkmk-secure.rule=Host(`${CHECKMK_URL}`)"
+      - "traefik.http.routers.checkmk-secure.tls=true"
+      - "traefik.http.routers.checkmk-secure.middlewares=secHeaders@file"
+      - "traefik.http.routers.checkmk-secure.service=checkmk"
+      - "traefik.http.services.checkmk.loadbalancer.server.port=5000"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external:
+      name: proxy
+  default:
+    ipam:
+      config:
+        - subnet: "172.21.4.0/24"
+          gateway: "172.21.4.1"

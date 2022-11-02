@@ -1,0 +1,38 @@
+api:
+  dashboard: true
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+  secure:
+    address: ":9999"
+  metrics:
+    address: ":8082"
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: "/dynamic_conf.yml"
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+certificatesResolvers:
+  inwx:
+    acme:
+      email: yourmail@example.com
+      storage: acme.json
+      dnsChallenge:
+        provider: inwx
+        resolvers:
+          - "ns.inwx.de"
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addServicesLabels: true
+    entryPoint: metrics
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
