@@ -5,7 +5,7 @@ As soon as the container is up, perform the installation steps on the NextCloud 
 
 Without these steps the nextcloud frontend is very slow for me.
 1. `docker inspect traefik`
-2. config.php anpassen:
+2. Change config file `/var/docker/nextcloud/app/config/config.php`
 ```bash
 'trusted_proxies' => '172.18.0.3/16'
 'overwrite.cli.url' => 'https://nextcloud.example.com',
