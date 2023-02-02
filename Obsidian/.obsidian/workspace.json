@@ -1,0 +1,211 @@
+{
+  "main": {
+    "id": "9c6011ed744b9a2b",
+    "type": "split",
+    "children": [
+      {
+        "id": "05cd283026189bc4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "bf59cc6b53ce3368",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Oracle/SBC/Theorie/SIP-Basic.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "85089d1ce983091c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Oracle/SBC/Theorie/SIP-Basic.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "b93aeb30faf5847d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/LPIC-2/200 Kapazitätsplanung/200.2 Prognostizieren zukünftiger Ressourenanforderungen.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ece72a9ffc5accb1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Oracle/SBC/Theorie/Einführung Session Border Controller.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "07010384dbb287b3",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Docker/Traefik.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5fe7e73e1dd300e5",
+    "type": "split",
+    "children": [
+      {
+        "id": "92336857e35fc3d0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2ebc561b5c37e4fe",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "6f406b9590298967",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "e0db26f7ac4973b9",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "a2fd7a4be62153ab",
+    "type": "split",
+    "children": [
+      {
+        "id": "44583d1f68b38d88",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "5a2b4492d73898b1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Docker/Traefik.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c7354859ef57bbdd",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Docker/Traefik.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "c91fda8d87ac0b38",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "aab736920aa93844",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Docker/Traefik.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Schnellauswahl öffnen": false,
+      "graph:Graphen-Ansicht öffnen": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Heutige Notiz öffnen": false,
+      "templates:Vorlage einfügen": false,
+      "command-palette:Befehlspalette öffnen": false
+    }
+  },
+  "active": "2ebc561b5c37e4fe",
+  "lastOpenFiles": [
+    "README.md",
+    "Git.md",
+    "().md",
+    "Docker/postgres backup.md",
+    "Linux/Basic/grub2.md",
+    "Oracle/SBC/Theorie/Einführung Session Border Controller.md",
+    "Oracle/SBC/Theorie/SIP-Basic.md",
+    "Linux/LPIC-2/200 Kapazitätsplanung/200.1 Messen und Problembehandlung bei der Ressourcenverwendung.md",
+    "Linux/LPIC-2/200 Kapazitätsplanung/200-Kapazitätsplanung.md",
+    "Oracle/SBC/Konfiguration/Basis Konfiguration Oracle SBC.md"
+  ]
+}
