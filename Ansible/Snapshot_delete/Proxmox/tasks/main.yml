@@ -1,0 +1,13 @@
+---
+# tasks file for Proxmox
+- name: Delete vm snapshot
+  community.general.proxmox_snap:
+    api_user: root@pam
+    api_password: 123456
+    api_host: 192.168.178.200
+    vmid: "{{ item }}"
+    state: absent
+    snapname: pre-updates
+  loop:
+    - 113
+    - 106

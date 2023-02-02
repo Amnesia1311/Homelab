@@ -1,0 +1,57 @@
+---
+- hosts: linux
+  become: true
+  pre_tasks:
+    - name: "Update Cache Debian"
+      apt: 
+        cache_valid_time: 1800
+        update_cache: yes
+      when: ansible_distribution == "Debian" or ansible_distribution == 'Ubuntu'
+
+    - name: "Update Cache RedHat"
+      yum:
+        update_cache: yes
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- hosts: proxmox
+  gather_facts: no
+  become: true
+  roles:
+    - Proxmox
+
+- hosts: linux
+  become: true
+  tasks:
+
+    - name: "Upgrade Debian Distributions"
+      apt:
+        upgrade: dist
+      when: ansible_distribution == "Debian" or ansible_distribution == 'Ubuntu'
+
+    - name: "Upgrade RedHat Distribuntion"
+      yum:
+        name: '*'
+        state: latest
+      when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+    - name: "Upgrade SLES Distribuntion"
+      zypper:
+        name: '*'
+        state: latest
+        disable_gpg_check: yes
+      when: ansible_distribution == 'openSUSE Leap'
+    
+
+    - name: "Check if reboot needed on Debian"
+      register: Debian_reboot_file
+      stat: path=/var/run/reboot-required get_md5=no
+
+    - name: "Reboot"
+      reboot:
+        msg: "Reboot"
+        connect_timeout: 5
+        reboot_timeout: 300
+        pre_reboot_delay: 0
+        post_reboot_delay: 30
+        test_command: uptime
+      when: Debian_reboot_file.stat.exists
