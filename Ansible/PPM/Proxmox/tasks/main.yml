@@ -3,8 +3,8 @@
 - name: Create new vm snapshot
   community.general.proxmox_snap:
     api_user: root@pam
-    api_password: 123456
-    api_host: 192.168.178.200
+    api_password: XXX
+    api_host: XXX.XXX.XXX.XXX
     vmid: "{{ item }}"
     state: present
     snapname: pre-updates
