@@ -2,6 +2,6 @@
 # vars file for Proxmox
 node        : pve
 api_user    : root@pam
-api_password: master1311
-api_host    : 192.168.178.200
+api_password: XXX
+api_host    : XXX.XXX.XXX.XXX
 vmid        : 106
